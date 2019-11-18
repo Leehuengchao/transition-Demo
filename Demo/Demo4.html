@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="JiangLiang" Date="2017/11/23">
+    <title>回忆无痕</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    #show {
+      perspective: 1000px;
+      /* 景深 */
+    }
+
+    #warp {
+      position: relative;
+      width: 230px;
+      height: 330px;
+      margin: 250px auto;
+      transform-style: preserve-3d;
+      /* 3d效果 */
+      transform: rotateX(-15deg);
+      /* 按照X轴旋转 */
+    }
+
+    #warp img {
+      position: absolute;
+      top: 0px;
+      -webkit-box-reflect: below 5px -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%);
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+
+  <body>
+    <div id="show">
+      <div id="warp">
+        <img src="https://github.com/Leehuengchao/transition-Demo/blob/master/Demo/images/6.jpg?raw=true" alt=""
+          width="100%" height="100%">
+        <img src="https://github.com/Leehuengchao/transition-Demo/blob/master/Demo/images/6.jpg?raw=true" alt=""
+          width="100%" height="100%">
+        <img src="https://github.com/Leehuengchao/transition-Demo/blob/master/Demo/images/6.jpg?raw=true" alt=""
+          width="100%" height="100%">
+        <img src="https://github.com/Leehuengchao/transition-Demo/blob/master/Demo/images/6.jpg?raw=true" alt=""
+          width="100%" height="100%">
+        <img src="https://github.com/Leehuengchao/transition-Demo/blob/master/Demo/images/6.jpg?raw=true" alt=""
+          width="100%" height="100%">
+        <img src="https://github.com/Leehuengchao/transition-Demo/blob/master/Demo/images/6.jpg?raw=true" alt=""
+          width="100%" height="100%">
+        <img src="https://github.com/Leehuengchao/transition-Demo/blob/master/Demo/images/6.jpg?raw=true" alt=""
+          width="100%" height="100%">
+
+      </div>
+    </div>
+    <audio src="./mp3/Westlife - Beautiful In White.mp3" controls="controls" autoplay="auto" loop="loop"></audio>
+  </body>
+  <script>
+    var oimg = document.getElementsByTagName("img");
+    var nowX, nowY, lastX, lastY, minusX, minusY, roX = -5,
+      roY = 0;
+    var oWarp = document.getElementById("warp");
+    var timer = null;
+
+    (function (i) {
+      var Ilenth = oimg.length;
+      var deg = 360 / Ilenth;
+      for (; i < Ilenth; i++) {
+        oimg[i].style.transform = "rotateY(" + deg * i + "deg) translateZ(400px)";
+      }
+    })(0);
+
+    document.onmousedown = function (e) {
+      /*鼠标按下时事件*/
+      var e = e || window.event; /*event对象*/
+
+      lastX = e.clientX;
+      lastY = e.clientY;
+
+      this.onmousemove = function (e) {
+        /*鼠标移动时事件*/
+        var e = e || window.event;
+        nowX = e.clientX;
+        nowY = e.clientY;
+
+
+        minusX = nowX - lastX;
+        minusY = nowY - lastY;
+
+
+        roY += minusX * 0.2;
+        roX += minusY * 0.1;
+
+        oWarp.style.transform = "rotateX(" + roX + "deg) rotateY(" + roY + "deg)";
+
+
+        lastX = nowX;
+        lastY = nowY;
+
+
+
+        this.onmouseout = function () {
+          /*鼠标离开时事件*/
+          this.onmousemove = null;
+          timer = setInterval(function () {
+            minusX *= 0.9;
+            minusY *= 0.9;
+
+            roY += minusX * 0.2;
+            roX += minusY * 0.1;
+
+            oWarp.style.transform = "rotateX(" + roX + "deg) rotateY(" + roY + "deg)";
+
+            if (Math.abs(minusX) < 0.1 || Math.abs(minusY) < 0.1) {
+
+
+              clearInterval(timer); /*停止当时定时器*/
+            }
+          }, 1000 / 60);
+
+        }
+      }
+    }
+  </script>
+
+</html>
